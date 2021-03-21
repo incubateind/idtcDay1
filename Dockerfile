@@ -1,18 +1,24 @@
-FROM node:13-alpine
+FROM python:3.7
 
-ENV MONGO_DB_USERNAME=admin \
-    MONGO_DB_PWD=password
+ENV PYTHONUNBUFFERED=1
+ENV ROOT=/usr/src/app
 
-RUN mkdir -p /home/app
+WORKDIR ${ROOT}
 
-COPY ./app /home/app
+# Add requirements now (allows caching of pip dependencies for faster builds)
+ADD requirements.txt ${ROOT}/requirements.txt
 
-# set default dir so that next commands executes in /home/app dir
-WORKDIR /home/app
+# Install requirements
+RUN pip install -r requirements.txt
 
-# will execute npm install in /home/app because of WORKDIR
-RUN npm install
+# We're going to run with gunicorn, so we need to install it.
+# Alternatively, gunicorn could have been specified in `requirements.txt`.
+RUN pip install gunicorn
 
-# no need for /home/app/server.js because of WORKDIR
-CMD ["node", "server.js"]
+# Add everything else the app may need (including templates)
+# into the container.
+ADD . ${ROOT}
 
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "api:api"]
+# Note: you could also have set the `PORT` environment variable and run:
+# CMD ["python", "api.py"]

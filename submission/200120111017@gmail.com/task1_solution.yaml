@@ -22,7 +22,7 @@ services:
     depends_on:
       - postgresdb
   demo-app:
-    image: vector30/postgres-node-demo
+    image: pranjal698/server
     restart: always
     ports:
       - 3000:3000

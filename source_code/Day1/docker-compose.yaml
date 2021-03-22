@@ -22,7 +22,7 @@ services:
     depends_on:
       - mongodb
   my-app:
-    image: j0d0va/my-app
+    image: swayam933/my-app:1.0
     restart: always
     ports:
       - 3000:3000

@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+    postgres:
+        image: 'postgres:latest'
+        restart: always
+        ports:
+            - 8385:8385
+        environment: 
+            POSTGRES_PASSWORD: 'postgres'
+        volumes: 
+            - ./volume:/var/lib/postgresql/data  
+    
+    pgadmin4:
+        image: 'dpage/pgadmin4'
+        restart: always
+        ports: 
+            - 8080:8081
+        environment:
+            PGADMIN_DEFAULT_EMAIL: 'admin'
+            PGADMIN_DEFAULT_PASSWORD: 'password'
+        depends_on:
+            - postgres
+
+    my-app:
+        image: 'pbharti/my-app'
+        restart: always
+        ports:
+          - 3000:3000
+        depends_on:
+            - postgres 

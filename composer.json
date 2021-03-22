@@ -1,0 +1,18 @@
+{
+    "name": "keboola/docker-demo-test",
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": "^7.0",
+        "phpunit/phpunit": "^6.0",
+        "codeclimate/php-test-reporter": "dev-master",
+        "squizlabs/php_codesniffer": "^2.6",
+        "phpstan/phpstan": "^0.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Keboola\\DockerDemo\\": "src/",
+            "Keboola\\DockerDemo\\Tests\\": "tests/"
+        }
+    }
+}

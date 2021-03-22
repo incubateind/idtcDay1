@@ -1,0 +1,35 @@
+version: '2'
+services:
+  docker-demo-app:
+    build: .
+    image: keboola/docker-demo-app
+    tty: true
+    stdin_open: true
+
+  tests:
+    image: keboola/docker-demo-app
+    volumes:
+      - ./:/code
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    entrypoint: /code/vendor/bin/phpunit
+
+  dev:
+    image: keboola/docker-demo-app
+    volumes:
+      - ./:/code
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    command: /bin/bash
+
+  xdebug:
+    image: keboola/docker-demo-app-xdebug
+    build:
+      context: .
+      dockerfile: docker/xdebug/Dockerfile
+    volumes:
+      - ./:/code
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    environment:
+      - CODECLIMATE_REPO_TOKEN
+      - PHP_IDE_CONFIG
+      - XDEBUG_CONFIG
